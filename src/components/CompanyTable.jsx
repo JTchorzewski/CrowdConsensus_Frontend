@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchCompanies } from "../services/api";
+import './CompanyTable.css';
+
 
 function CompanyTable() {
     const [data, setData] = useState([]);
@@ -7,8 +9,8 @@ function CompanyTable() {
     useEffect(() => {
         fetchCompanies().then((fetchedData) => {
             console.log("Dane z API:", fetchedData);
-            // Używamy companyList, aby ustawić dane
-            setData(fetchedData.companyList || []); // Jeśli API zwraca obiekt z 'companyList', przypisujemy go do stanu
+            
+            setData(fetchedData.companyList || []); 
         });
     }, []);
 
