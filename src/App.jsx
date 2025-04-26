@@ -1,20 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/LandingPage";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import CompanyTable from "./components/CompanyTable";
-import "./Landing.css"; 
-
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/spolki" element={<CompanyTablePage />} />
-      </Routes>
-    </Router>
-  );
-}
-
+import "./Landing.css";
 
 function CompanyTablePage() {
   return (
@@ -25,6 +15,17 @@ function CompanyTablePage() {
         © {new Date().getFullYear()} Aplikacja Giełdowa
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/spolki" element={<CompanyTablePage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
   );
 }
 
