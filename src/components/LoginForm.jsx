@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from '../services/api';
 import logo from "../assets/logo.png";
 
 function LoginForm() {
@@ -7,39 +8,28 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError('');
     setIsLoading(true);
 
-    const loginData = { credential, password };
-    const backendUrl = '/api/login';
-
     try {
-      const response = await fetch(backendUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginData)
-      });
+      const result = await loginUser(credential, password);
+      console.log('Login successful:', result);
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Login successful:', result);
-        alert('Logowanie udane!');
+      localStorage.setItem('token', result.token);
+
+      alert('Logowanie udane!');
+      navigate('/dashboard');
+    } catch (err) {
+      console.error(err);
+      if (typeof err === 'string') {
+        setError(err);
       } else {
-        let errorMsg = 'Wystąpił błąd logowania.';
-        try {
-          const errorData = await response.json();
-          errorMsg = errorData.message || `Błąd: ${response.status} ${response.statusText}`;
-        } catch {
-          errorMsg = `Błąd: ${response.status} ${response.statusText}`;
-        }
-        setError(errorMsg);
+        setError(err.message || 'Wystąpił błąd podczas logowania');
       }
-    } catch (error) {
-      console.error('Network or Fetch Error:', error);
-      setError('Nie można połączyć się z serwerem. Spróbuj ponownie później.');
     } finally {
       setIsLoading(false);
     }
@@ -53,12 +43,12 @@ function LoginForm() {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="mb-3 text-start">
-          <label htmlFor="emailOrPhone" className="form-label fw-semibold">E-mail/Numer tel.</label>
+          <label htmlFor="emailOrUsername" className="form-label fw-semibold">E-mail / Nazwa użytkownika</label>
           <input
             type="text"
             className="form-control rounded-3"
-            id="emailOrPhone"
-            placeholder="E-mail/Numer tel."
+            id="emailOrUsername"
+            placeholder="E-mail lub nazwa użytkownika"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
             required

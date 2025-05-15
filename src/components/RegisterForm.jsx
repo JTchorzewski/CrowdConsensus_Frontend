@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { registerUser } from '../services/api';
 
 function RegisterForm() {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
     confirmPassword: ''
   });
@@ -19,11 +19,10 @@ function RegisterForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
-
 
     if (formData.password !== formData.confirmPassword) {
       setError('Hasła muszą być takie same.');
@@ -31,17 +30,31 @@ function RegisterForm() {
       return;
     }
 
-    console.log(formData);
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      await registerUser(formData.username, formData.password);
       alert('Rejestracja udana!');
-    }, 1000);
+      // Możesz tutaj np. wyczyścić formularz lub przekierować na login
+      setFormData({
+        username: '',
+        password: '',
+        confirmPassword: ''
+      });
+    } catch (err) {
+      console.error(err);
+      if (typeof err === 'string') {
+        setError(err);
+      } else {
+        setError(err.message || 'Wystąpił błąd podczas rejestracji');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-3 text-start">
-        <label htmlFor="username" className="form-label fw-semibold">Nazwa użytkownika</label>
+        <label htmlFor="username" className="form-label fw-semibold">Nazwa użytkownika (Email)</label>
         <input
           type="text"
           className="form-control rounded-3"
@@ -49,21 +62,6 @@ function RegisterForm() {
           name="username"
           placeholder="Nazwa użytkownika"
           value={formData.username}
-          onChange={handleChange}
-          required
-          disabled={isLoading}
-        />
-      </div>
-
-      <div className="mb-3 text-start">
-        <label htmlFor="email" className="form-label fw-semibold">E-mail</label>
-        <input
-          type="email"
-          className="form-control rounded-3"
-          id="email"
-          name="email"
-          placeholder="E-mail"
-          value={formData.email}
           onChange={handleChange}
           required
           disabled={isLoading}
