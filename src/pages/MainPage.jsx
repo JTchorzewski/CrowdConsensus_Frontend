@@ -137,16 +137,16 @@ export default function MainPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {items.map(c => (
-                        <tr key={c.id}>
-                          <td>{c.companyName}</td>
-                          <td>{c.lastReportDate}</td>
-                          <td>{c.netIncome}</td>
-                          <td><img src={c.sparklineUrl} alt={`Notowania ${c.companyName}`} height="24" /></td> {/* Added alt text */}
-                          <td>{c.prediction}</td>
-                        </tr>
-                      ))}
-                    </tbody>
+  {items.map(c => (
+    <tr key={c.id}>
+      <td>{c.companyName}</td>
+      <td>{new Date(c.raportDate).toLocaleDateString()}</td>
+      <td>{c.netProfit.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' })}</td>
+      <td><i>brak danych</i></td> {/* jeśli sparklineUrl nie ma */}
+      <td><i>brak predykcji</i></td> {/* jeśli prediction nie ma */}
+    </tr>
+  ))}
+</tbody>
                   </table>
                 </div>
 

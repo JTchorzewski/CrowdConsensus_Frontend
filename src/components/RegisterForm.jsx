@@ -5,7 +5,7 @@ function RegisterForm() {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    confirmPassword: ''
+    //confirmPassword: ''
   });
 
   const [error, setError] = useState('');
@@ -24,16 +24,15 @@ function RegisterForm() {
     setError('');
     setIsLoading(true);
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Hasła muszą być takie same.');
-      setIsLoading(false);
-      return;
-    }
+    //if (formData.password !== formData.confirmPassword) {
+      //setError('Hasła muszą być takie same.');
+      //setIsLoading(false);
+      //return;
+    //}
 
     try {
       await registerUser(formData.username, formData.password);
       alert('Rejestracja udana!');
-      // Możesz tutaj np. wyczyścić formularz lub przekierować na login
       setFormData({
         username: '',
         password: '',
@@ -83,20 +82,7 @@ function RegisterForm() {
         />
       </div>
 
-      <div className="mb-3 text-start">
-        <label htmlFor="confirmPassword" className="form-label fw-semibold">Potwierdź hasło</label>
-        <input
-          type="password"
-          className="form-control rounded-3"
-          id="confirmPassword"
-          name="confirmPassword"
-          placeholder="Potwierdź hasło"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-          required
-          disabled={isLoading}
-        />
-      </div>
+ 
 
       {error && <div className="alert alert-danger rounded-3 text-center small">{error}</div>}
 
