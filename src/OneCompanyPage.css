@@ -1,0 +1,118 @@
+/* src/OneCompanyPage.css */
+
+/* ... (all previous styles from before the footer section remain the same) ... */
+
+
+/* --- Footer Styling for PageShell (to match LandingPage intentions) --- */
+#footer {
+  background-color: #f8f9fa;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#footer .container > .row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* For desktop: spreads columns */
+  text-align: left; /* For desktop: text within columns is left-aligned */
+}
+
+#footer .container > .row > .col-md-4 {
+  flex-basis: 30%;
+  max-width: 32%;
+  margin-bottom: 1.5rem;
+}
+
+#footer h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+#footer .d-flex.flex-column { /* Targeting the div that wraps the list of links */
+    align-items: flex-start; /* For desktop: align links to the start (left) */
+}
+
+
+#footer .d-flex.flex-column a,
+#footer .discord-wrapper {
+  text-decoration: none;
+  color: #444;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.6;
+  transition: color 0.2s ease;
+  display: block; /* Good for consistent spacing */
+  margin-bottom: 0.35rem;
+}
+#footer .d-flex.flex-column a:last-child {
+  margin-bottom: 0;
+}
+
+#footer .d-flex.flex-column a:hover,
+#footer .discord-wrapper:hover {
+  color: #4D6796;
+}
+
+#footer .discord-wrapper {
+  display: inline-flex; /* For desktop: allows icon and text on same line, aligns by parent's text-align */
+  align-items: center;  /* Vertically align icon and text */
+}
+
+#footer .discord-wrapper img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+#footer .text-center.py-4.small.text-muted {
+  border-top: 1px solid #dee2e6;
+  padding-top: 1.5rem !important;
+  padding-bottom: 1.5rem !important;
+  background-color: #f8f9fa;
+  color: #6c757d;
+}
+
+
+/* --- Mobile Footer --- */
+@media (max-width: 991.98px) { /* Screen sizes smaller than 'large' (Bootstrap lg breakpoint) */
+  #footer .container > .row {
+    justify-content: center; /* Center the column blocks themselves */
+    /* text-align: center;  This on the row might be too broad, let's control column content */
+  }
+
+  #footer .container > .row > .col-md-4 {
+    flex-basis: 80%;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center; /* THIS IS KEY: Make text and inline/inline-block elements center within the column */
+  }
+
+  #footer .d-flex.flex-column { /* The div wrapping the list of links */
+    align-items: center; /* THIS IS KEY: Centers the block-level links themselves if they don't span full width */
+  }
+
+  /* Ensure individual links, if not full width by default, also center their text if wrapped */
+  #footer .d-flex.flex-column a {
+    /* text-align: center; // Usually inherited from parent .col-md-4 text-align:center */
+  }
+
+  #footer .discord-wrapper {
+    display: inline-flex; /* Allows centering as an inline-block like element via parent text-align */
+    /* justify-content: center; Not needed if parent is text-align:center and this is inline-flex */
+  }
+}
+
+@media (max-width: 767.98px) { /* Screen sizes smaller than 'medium' (Bootstrap md breakpoint) */
+  #footer .container > .row > .col-md-4 {
+    flex-basis: 100%; /* Columns take full width */
+    max-width: 100%;
+    /* text-align: center; // Already set from the previous breakpoint */
+  }
+  /* No changes needed for .d-flex.flex-column or discord-wrapper here,
+     they will inherit the centering from the 991.98px breakpoint if text-align and align-items are set */
+}

@@ -1,22 +1,33 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import LandingPage  from './pages/LandingPage';
-import LoginPage    from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import MainPage     from './pages/MainPage';
-import PrivateRoute from './components/PrivateRoute';
+import LandingPage    from './pages/LandingPage.jsx';
+import LoginPage      from './pages/LoginPage.jsx';
+import RegisterPage   from './pages/RegisterPage.jsx';
+import MainPage       from './pages/MainPage.jsx';
+import OneCompanyPage from './pages/OneCompanyPage.jsx';
+import PrivateRoute   from './components/PrivateRoute.jsx';
 
 function App() {
   return (
     <Routes>
-      <Route path="/"         element={<LandingPage />}  />
-      <Route path="/login"    element={<LoginPage />}    />
+      <Route path="/"         element={<LandingPage />} />
+      <Route path="/login"    element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-        <Route
+
+      <Route
         path="/spolki"
         element={
           <PrivateRoute>
             <MainPage />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/spolki/:id"
+        element={
+          <PrivateRoute>
+            <OneCompanyPage />
           </PrivateRoute>
         }
       />
