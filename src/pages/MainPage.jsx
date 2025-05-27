@@ -16,7 +16,7 @@ export default function MainPage() {
   const [page, setPage]         = useState(1);
   const [query, setQuery]       = useState('');
   const [loading, setLoading]   = useState(false);
-  const PAGE_SIZE = 40;
+  const PAGE_SIZE = 10;
 
   useEffect(() => {
     setLoading(true);
@@ -130,20 +130,12 @@ export default function MainPage() {
                     <thead>
                       <tr>
                         <th>Spółka</th>
-                        <th>Data Ostatniego Raportu</th>
-                        <th>Zysk Netto</th>
-                        <th>Notowania</th>
-                        <th>Przewidywania</th>
                       </tr>
                     </thead>
                     <tbody>
   {items.map(c => (
     <tr key={c.id}>
-      <td>{c.companyName}</td>
-      <td>{new Date(c.raportDate).toLocaleDateString()}</td>
-      <td>{c.netProfit.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' })}</td>
-      <td><i>brak danych</i></td> {/* jeśli sparklineUrl nie ma */}
-      <td><i>brak predykcji</i></td> {/* jeśli prediction nie ma */}
+      <td><Link to={`/spolki/${c.id}`} className="nav-link text-dark">{c.companyName}</Link></td>
     </tr>
   ))}
 </tbody>

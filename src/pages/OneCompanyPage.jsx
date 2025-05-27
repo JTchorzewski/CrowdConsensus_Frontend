@@ -10,6 +10,7 @@ import { fetchCompany } from '../services/api'; //  Re-enable this import
 import { Spinner } from 'react-bootstrap';
 // Re-enable chart imports
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import Pagination from '../components/Pagination';
 
 // PageShell component (remains the same as before)
 const PageShell = ({ children, menuOpen, setMenuOpen }) => (
@@ -93,7 +94,8 @@ export default function OneCompanyPage() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [error, setError] = useState(null); // New state for API errors
-
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 10
   useEffect(() => {
     let isMounted = true; // Flag to prevent state update on unmounted component
     setLoading(true);
@@ -109,11 +111,17 @@ export default function OneCompanyPage() {
           console.log("Received company data:", data);
           const processedData = {
             ...data,
-            // Ensure revenueStatements is an array and process it for labels
-            revenueStatements: (Array.isArray(data.revenueStatements) ? data.revenueStatements : []).map(item => ({
-              ...item,
-              label: `Q${item.quarter} ${item.year}` // Create label for chart
-            }))
+            companyName: data.items?.[0]?.companyName ?? "Brak nazwy",
+            revenueStatements: Array.isArray(data.items) ? data.items.map(item => {
+              const [year, quarterRaw] = item.raportDate.split('/'); // np. "2005", "Q2"
+              const quarter = quarterRaw?.replace('Q', '');
+              return {
+                ...item,
+                  year,
+                  quarter,
+                  label: `${item.raportDate}`, // lub: `Q${quarter} ${year}`
+               };
+              }) : []
           };
           setCompany(processedData);
         } else {
@@ -182,31 +190,60 @@ export default function OneCompanyPage() {
           </div>
 
           <div className="row mb-4">
-            <div className="col-lg-5 col-md-6 mb-4 mb-lg-0"> {/* Adjust column sizes for better balance with chart/pills */}
-              <h4 className="mb-3">Podstawowe Informacje</h4>
-              <table className="table table-sm table-striped mb-0">
-                <tbody>
-                  <tr>
-                    <th scope="row" style={{width: '45%'}}>Data Ostatniego Raportu</th>
-                    <td>{reportDate ? new Date(reportDate).toLocaleDateString('pl-PL') : 'Brak danych'}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Zysk Netto</th>
-                    <td>{(typeof netProfit === 'number') ? netProfit.toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' }) : 'Brak danych'}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">Przychód (łączny z raportów)</th>
-                    <td>
-                      {revenueStatements.length > 0
-                        ? revenueStatements
-                            .reduce((sum, q) => sum + (q.revenue || 0), 0)
-                            .toLocaleString('pl-PL', { style: 'currency', currency: 'PLN' })
-                        : 'Brak danych'}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <div className="col-12 mt-4">
+  <h4 className="mb-3">Raporty Finansowe</h4>
+
+  {loading ? (
+    <div className="text-center py-5">
+      <div className="spinner-border text-primary" role="status" />
+    </div>
+  ) : (
+    <>
+      <div className="table-responsive">
+        <table className="table table-striped table-sm mb-0">
+          <thead>
+            <tr>
+              <th>Data Raportu</th>
+              <th>Zysk Netto</th>
+              <th>Przychód</th>
+            </tr>
+          </thead>
+          <tbody>
+            {revenueStatements
+              .map(c => (
+                <tr key={c.id}>
+                  <td>
+                    {c.raportDate}
+                  </td>
+                  <td>
+                    {c.netProfit}
+                  </td>
+                  <td>
+                    {c.revenue}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+
+      {revenueStatements.length > PAGE_SIZE && (
+        <div className="d-flex justify-content-center mt-4">
+          <Pagination
+            current={page}
+            total={revenueStatements.length}
+            pageSize={PAGE_SIZE}
+            onChange={setPage}
+          />
+        </div>
+      )}
+
+      {revenueStatements.length === 0 && (
+        <p className="text-center mt-4">Brak raportów do wyświetlenia.</p>
+      )}
+    </>
+  )}
+</div>
 
             {/* Only show revenue pills if there's data */}
             {revenueStatements.length > 0 && (

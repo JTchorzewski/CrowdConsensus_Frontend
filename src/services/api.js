@@ -6,11 +6,11 @@ const API_URL = "https://localhost:7207/api"; // Or your http://localhost:8080/a
 
 export const fetchCompanies = async ({
   page = 1,
-  pageSize = 40,
+  pageSize = 10,
   q = ""
 }) => {
   try {
-    const resp = await axios.get(`${API_URL}/companies`, {
+    const resp = await axios.get(`${API_URL}/companies/companylist`, {
       params: { page, pageSize, q }
     });
     return resp.data;
@@ -20,24 +20,20 @@ export const fetchCompanies = async ({
   }
 };
 
-// 👇 ****** ADD THIS FUNCTION ****** 👇
+
 export const fetchCompany = async (id) => {
   try {
-    // Assuming your API endpoint for a single company is something like /api/companies/{id}
     const resp = await axios.get(`${API_URL}/companies/${id}`);
-    // resp.data should be the company object
     return resp.data;
   } catch (error) {
     console.error(`Błąd pobierania danych spółki o ID ${id}:`, error);
-    // You might want to return null or throw the error depending on how you handle it in the component
-    // For OneCompanyPage.jsx, returning null or an empty object might be better to show a "not found" message
     if (error.response && error.response.status === 404) {
       console.warn(`Spółka o ID ${id} nie została znaleziona (404).`);
       return null; // Or handle as needed
     }
-    // For other errors, re-throw or return a more generic error object
-    // throw error; // Or return null to let the component handle it.
-    return null; // Let's return null for simplicity here, the component checks for !company
+ 
+ 
+    return null; 
   }
 };
 // 👆 ****** END OF ADDED FUNCTION ****** 👆
