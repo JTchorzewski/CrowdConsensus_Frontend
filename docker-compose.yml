@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: jtchorzewski/crowdconsensus-db:latest
+    container_name: crowd-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_DB: CrowdConsensus
+    networks:
+      - appnet
+
+  app:
+    image: jtchorzewski/ccapp:latest
+    container_name: ccapp
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=CrowdConsensus;Username=postgres;Password=1234"
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge

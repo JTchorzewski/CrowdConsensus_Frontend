@@ -99,22 +99,21 @@ export default function MainPage() {
               <span className="text-primary">Lista</span> spółek
             </h3>
             <form 
-  className="search-form d-flex" 
-  onSubmit={onSearch} 
-  style={{ maxWidth: '300px' }} 
->
-  <div className="form-control search-input-ratio">
-    <input
-      name="search"
-      type="text"
-      className="form-control"
-      placeholder="Szukaj spółki…"
-      aria-label="Szukaj spółki"
-    />
-    <button type="submit" className="btn btn-primary search-button-ratio">Szukaj</button>
-  </div>
-</form>
-
+              className="search-form d-flex" 
+              onSubmit={onSearch} 
+              style={{ maxWidth: '300px' }} 
+            >
+              <div className="form-control search-input-ratio">
+                <input
+                  name="search"
+                  type="text"
+                  className="form-control"
+                  placeholder="Szukaj spółki…"
+                  aria-label="Szukaj spółki"
+                />
+                <button type="submit" className="btn btn-primary search-button-ratio">Szukaj</button>
+              </div>
+            </form>
           </div>
 
           {loading
@@ -129,16 +128,24 @@ export default function MainPage() {
                   <table className="table mb-0">
                     <thead>
                       <tr>
-                        <th>Spółka</th>
+                      <th>Spółka</th>
+                        <th>Zysk (NetProfit)</th>
+                        <th>Data Ostatniego Raportu</th>
                       </tr>
                     </thead>
                     <tbody>
-  {items.map(c => (
-    <tr key={c.id}>
-      <td><Link to={`/spolki/${c.id}`} className="nav-link text-dark">{c.companyName}</Link></td>
-    </tr>
-  ))}
-</tbody>
+                      {items.map(c => (
+                        <tr key={c.id}>
+                          <td>
+                            <Link to={`/spolki/${c.id}`} className="nav-link text-dark">
+                              {c.companyName}
+                            </Link>
+                          </td>
+                          <td>{c.netProfit}</td>
+                          <td>{c.raportDate}</td>
+                        </tr>
+                      ))}
+                    </tbody>
                   </table>
                 </div>
 
@@ -170,7 +177,7 @@ export default function MainPage() {
       </main>
 
       {/* ——— Footer ——— */}
-      <div id="footer" className="bg-light"> {/* Consider making this `<footer>` semantic tag */}
+      <div id="footer" className="bg-light">
         <div className="container py-5">
           <div className="row">
             <div className="col-md-4 mb-4 mb-md-0">
