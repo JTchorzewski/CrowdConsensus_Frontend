@@ -1,0 +1,148 @@
+/** ProfilePage.css */
+
+.profile-container {
+  background-color: #f8f9fa;
+  padding: 2rem 1rem;
+  min-height: 70vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-section,
+.pseudonym-section,
+.section-6 {
+  background-color: #FAFBFA;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.pseudonym-section {
+  height: 250px;
+}
+
+.profile-section-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: #4D6796;
+  margin-bottom: 1rem;
+}
+
+.pseudonym-label,
+.notification-label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #859FBB;
+  margin-bottom: 0.5rem;
+}
+
+.pseudonym-description,
+.notification-description {
+  font-size: 14px;
+  color: #6c757d;
+  max-width: 700px;
+}
+
+.btn-edit {
+  background-color: #3E4A6F;
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  transition: background-color 0.2s ease-in-out;
+  width: 100%;
+}
+
+.btn-edit:hover {
+  background-color: #2e3758;
+}
+
+.footer-column-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.footer-link {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  margin-bottom: 0.35rem;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #4D6796;
+}
+
+.discord-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-6 .text-muted {
+  font-size: 0.875rem;
+  color: #6c757d;
+  border-top: 1px solid #dee2e6;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Responsive improvements */
+@media (max-width: 767.98px) {
+  .btn-edit {
+    width: 100%;
+  }
+
+  .section-6 .row > div {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .discord-wrapper {
+    justify-content: center;
+  }
+
+  .d-flex.flex-column {
+    align-items: center;
+  }
+
+  .profile-section-title,
+  .notification-label,
+  .pseudonym-label {
+    text-align: center;
+  }
+
+  .profile-container {
+    padding: 1rem;
+  }
+
+  .notification-description,
+  .pseudonym-description {
+    text-align: center;
+  }
+}
+
+/* Bootstrap utility overrides */
+.fw-bold {
+  font-weight: 700 !important;
+}
+
+.fs-3 {
+  font-size: 1.75rem !important;
+}
+
+.text-primary {
+  color: #4D6796 !important;
+}
