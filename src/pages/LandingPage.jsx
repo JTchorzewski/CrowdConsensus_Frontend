@@ -26,7 +26,7 @@ function LandingPage() {
 
         <nav className={`d-md-flex ${menuOpen ? 'd-flex flex-column gap-2 mt-3' : 'd-none'}`}>
           <ul className="nav gap-4 flex-column flex-md-row align-items-center">
-            <li className="nav-item"><a href="#services" className="nav-link text-dark">Usługi</a></li>
+            <li className="nav-item"><a href="/spolki" className="nav-link text-dark">Firmy</a></li>
             <li className="nav-item"><a href="#about" className="nav-link text-dark">O nas</a></li>
             <li className="nav-item"><a href="#contact" className="nav-link text-dark">Kontakt</a></li>
           </ul>
