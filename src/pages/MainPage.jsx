@@ -129,7 +129,7 @@ export default function MainPage() {
                     <thead>
                       <tr>
                       <th>Spółka</th>
-                        <th>Zysk (NetProfit)</th>
+                        <th>Zysk Netto</th>
                         <th>Data Ostatniego Raportu</th>
                       </tr>
                     </thead>
@@ -141,8 +141,8 @@ export default function MainPage() {
                               {c.companyName}
                             </Link>
                           </td>
-                          <td>{c.netProfit}</td>
-                          <td>{c.raportDate}</td>
+                          <td>{c.newestNetProfit}</td>
+                          <td>{c.newestRaportDate}</td>
                         </tr>
                       ))}
                     </tbody>
