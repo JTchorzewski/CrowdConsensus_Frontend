@@ -28,7 +28,7 @@ function LandingPage() {
           <ul className="nav gap-4 flex-column flex-md-row align-items-center">
             <li className="nav-item"><a href="/spolki" className="nav-link text-dark">Firmy</a></li>
             <li className="nav-item"><a href="#about" className="nav-link text-dark">O nas</a></li>
-            <li className="nav-item"><a href="#contact" className="nav-link text-dark">Kontakt</a></li>
+            <li className="nav-item"><a href="/kontakt" className="nav-link text-dark">Kontakt</a></li>
           </ul>
         </nav>
 

@@ -41,15 +41,16 @@ export default function MainPage() {
       <header className="header border-bottom">
         <div className="container-fluid d-flex align-items-center px-3 px-md-4">
           {/* logo & mobile title */}
-          <div className="d-flex align-items-center gap-3">
-            <img
-              src={logo}
-              alt="Crowd Consensus"
-              className="d-none d-md-block"
-              style={{ height: 111, width: 124.44 }}
-            />
-            <h1 className="h4 m-0 d-md-none">Crowd Consensus</h1>
-          </div>
+          <Link to="/" className="d-flex align-items-center gap-3 text-decoration-none">
+  <img
+    src={logo}
+    alt="Crowd Consensus"
+    className="d-none d-md-block"
+    style={{ height: 111, width: 124.44 }}
+  />
+  <h1 className="h4 m-0 d-md-none text-dark">Crowd Consensus</h1>
+</Link>
+
 
           {/* nav (desktop) */}
           <nav className="d-none d-md-flex ms-4">

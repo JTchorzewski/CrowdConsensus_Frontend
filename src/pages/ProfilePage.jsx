@@ -191,7 +191,7 @@ const ProfilePage = () => {
   </div>
 </div>
 
-        {/* Tu kolejne sekcje profilu */}
+     
       </main>
 
      

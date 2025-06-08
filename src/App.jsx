@@ -7,6 +7,8 @@ import MainPage       from './pages/MainPage.jsx';
 import OneCompanyPage from './pages/OneCompanyPage.jsx';
 import PrivateRoute   from './components/PrivateRoute.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
+import ContactPage from './pages/ContactPage';
+
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
       <Route path="/login"    element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/kontakt" element={<ContactPage />} />
+
       <Route
         path="/spolki"
         element={
