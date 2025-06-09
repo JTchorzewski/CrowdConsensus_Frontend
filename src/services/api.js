@@ -1,8 +1,8 @@
 // src/services/api.js
 import axios from "axios";
 
-//const API_URL = "https://localhost:7207/api";
-const API_URL = "http://localhost:8080/api";
+const API_URL = "https://localhost:7207/api";
+//const API_URL = "http://localhost:8080/api";
 
 export const fetchCompanies = async ({
   page = 1,

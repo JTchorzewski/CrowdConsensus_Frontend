@@ -154,9 +154,8 @@ export default function MainPage() {
                         </td>
                         <td>{c.newestNetProfit}</td>
                         <td>{c.newestRaportDate}</td>
-                        <td>{c.newestPrediction}</td>
+                        <td>{c.newestPrediction.toFixed(2)}</td>
                         <td>
-                          {c.newestPrediction}{' '}
                           {Number(c.newestPrediction) > 0 ? '📈'
                             : Number(c.newestPrediction) < 0 ? '📉'
                             : null}
