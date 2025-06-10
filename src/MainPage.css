@@ -36,6 +36,16 @@
   min-width: 200px; 
 
 }
+/* ── Make “Wyślij” & “Anuluj” equal-height and centered ── */
+.prediction-form-btn {
+  /* This ensures the text inside is always vertically centered */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* This sets a minimum height. 31px is the standard height for Bootstrap's .btn-sm */
+  min-height: 31px; 
+}
 
 @media (max-width: 767.98px) { 
   .section-header-controls {
@@ -123,3 +133,4 @@
   flex-basis: 0%;    
   min-width: 0;       
 }
+/* ── Make “Wyślij” & “Anuluj” equal-height and centered ── *

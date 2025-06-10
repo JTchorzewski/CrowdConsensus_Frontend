@@ -1,0 +1,41 @@
+.predictions-page {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+  
+  .predictions-page h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  .predictions-page .empty-message {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+    margin-top: 3rem;
+  }
+  
+  .predictions-page .table-responsive {
+    margin-top: 1rem;
+  }
+  
+  .predictions-page table {
+    background-color: #fff;
+  }
+  
+  .predictions-page th,
+  .predictions-page td {
+    vertical-align: middle;
+  }
+  
+  .predictions-page a {
+    color: #4D6796;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .predictions-page a:hover {
+    text-decoration: underline;
+  }
+  

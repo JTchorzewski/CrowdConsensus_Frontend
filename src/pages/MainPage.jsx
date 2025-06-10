@@ -1,31 +1,38 @@
-// src/pages/MainPage.jsx
 import React, { useState, useEffect } from 'react';
 import '../Landing.css';
 import '../MainPage.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import logo from '../assets/logo.png';
 import discord from '../assets/discord.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { fetchCompanies } from '../services/api';
+import { fetchCompanies, addPrediction } from '../services/api';
 import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
 
 export default function MainPage() {
-  const [menuOpen, setMenuOpen]       = useState(false);
-  const [allItems, setAllItems]       = useState([]);       // all companies
-  const [filteredItems, setFiltered]  = useState([]);       // after search
-  const [total, setTotal]             = useState(0);        // filtered count
-  const [page, setPage]               = useState(1);
-  const [query, setQuery]             = useState('');
-  const [loading, setLoading]         = useState(false);
-  const PAGE_SIZE = 10;
-  const BIG_PAGE   = 1000; // hopefully larger than your total companies
+  const [menuOpen, setMenuOpen]                   = useState(false);
+  const [allItems, setAllItems]                   = useState([]);
+  const [filteredItems, setFiltered]              = useState([]);
+  const [total, setTotal]                         = useState(0);
+  const [page, setPage]                           = useState(1);
+  const [query, setQuery]                         = useState('');
+  const [loading, setLoading]                     = useState(false);
+  const navigate                                   = useNavigate();
 
-  // 1. fetch everything once
+  // Prediction form state
+  const [editingRowId, setEditingRowId]           = useState(null);
+  const [predictionDirection, setPredictionDirection] = useState(''); // "up" or "down"
+  const [isSubmitting, setIsSubmitting]           = useState(false);
+  const [submitError, setSubmitError]             = useState(null);
+
+  const PAGE_SIZE = 10;
+  const BIG_PAGE  = 1000;
+
+  // Fetch all companies (for client-side filtering)
   useEffect(() => {
     setLoading(true);
-    fetchCompanies({ page: 1, pageSize: BIG_PAGE })
+    fetchCompanies({ page: 1, pageSize: BIG_PAGE, q: '' })
       .then(({ items }) => {
         const list = items || [];
         setAllItems(list);
@@ -36,47 +43,75 @@ export default function MainPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  // 2. whenever the search query changes, filter client-side
+  // Apply client-side search
   useEffect(() => {
     const term = query.trim().toLowerCase();
     if (!term) {
       setFiltered(allItems);
       setTotal(allItems.length);
     } else {
-      const filtered = allItems.filter(c =>
+      const f = allItems.filter(c =>
         c.companyName.toLowerCase().includes(term)
       );
-      setFiltered(filtered);
-      setTotal(filtered.length);
+      setFiltered(f);
+      setTotal(f.length);
     }
     setPage(1);
   }, [query, allItems]);
 
-  // 3. slice out only the current page of filtered results
   const paged = filteredItems.slice(
     (page - 1) * PAGE_SIZE,
     page * PAGE_SIZE
   );
 
-  // 4. handed to SearchBar
   const handleSearch = term => setQuery(term);
+
+  const handleOpenPredictionForm = companyId => {
+    setEditingRowId(companyId);
+    setPredictionDirection('');
+    setSubmitError(null);
+  };
+
+  const handleCancelPrediction = () => {
+    setEditingRowId(null);
+  };
+
+  const handleAddPrediction = (e, companyId) => {
+    e.preventDefault();
+    if (!predictionDirection) {
+      setSubmitError('Wybierz, czy pójdzie w górę czy w dół.');
+      return;
+    }
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    addPrediction({ companyId, direction: predictionDirection })
+      .then(() => {
+        alert('Twoja predykcja została pomyślnie dodana!');
+        setEditingRowId(null);
+        navigate('/predykcje');
+      })
+      .catch(err => {
+        console.error(err);
+        setSubmitError(err.message || 'Wystąpił błąd. Spróbuj ponownie.');
+      })
+      .finally(() => setIsSubmitting(false));
+  };
 
   return (
     <div className="main-page-wrapper">
       {/* ——— Header ——— */}
       <header className="header border-bottom">
         <div className="container-fluid d-flex align-items-center px-3 px-md-4">
-
-          {/* logo & mobile title */}
           <Link to="/" className="d-flex align-items-center gap-3 text-decoration-none">
-  <img
-    src={logo}
-    alt="Crowd Consensus"
-    className="d-none d-md-block"
-    style={{ height: 111, width: 124.44 }}
-  />
-  <h1 className="h4 m-0 d-md-none text-dark">Crowd Consensus</h1>
-</Link>
+            <img
+              src={logo}
+              alt="Crowd Consensus"
+              className="d-none d-md-block"
+              style={{ height: 111, width: 124.44 }}
+            />
+            <h1 className="h4 m-0 d-md-none text-dark">Crowd Consensus</h1>
+          </Link>
 
           <nav className="d-none d-md-flex ms-4">
             <ul className="nav gap-3">
@@ -94,7 +129,7 @@ export default function MainPage() {
           </div>
 
           <div className="d-md-none ms-auto" onClick={() => setMenuOpen(o => !o)}>
-            {menuOpen ? <X size={28}/> : <Menu size={28}/>}
+            {menuOpen ? <X size={28}/> : <Menu size={28}/> }
           </div>
           {menuOpen && (
             <div className="w-100 d-md-none mt-3 mobile-menu-items">
@@ -117,8 +152,6 @@ export default function MainPage() {
       {/* ——— Main Section ——— */}
       <main className="container mt-4">
         <section className="bg-white rounded shadow-sm p-4">
-
-          {/* header + search */}
           <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap section-header-controls">
             <h3 className="fw-bold main-title me-3 mb-2 mb-sm-0">
               <span className="text-primary">Lista</span> spółek
@@ -132,7 +165,6 @@ export default function MainPage() {
             </div>
           ) : (
             <>
-              {/* table */}
               <div className="table-responsive">
                 <table className="table mb-0">
                   <thead>
@@ -142,6 +174,7 @@ export default function MainPage() {
                       <th>Data Ostatniego Raportu</th>
                       <th>Predykcja %</th>
                       <th>Przewidywanie</th>
+                      <th>Twoja Predykcja</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -156,9 +189,62 @@ export default function MainPage() {
                         <td>{c.newestRaportDate}</td>
                         <td>{c.newestPrediction.toFixed(2)}</td>
                         <td>
-                          {Number(c.newestPrediction) > 0 ? '📈'
-                            : Number(c.newestPrediction) < 0 ? '📉'
-                            : null}
+                          {Number(c.newestPrediction) > 0
+                            ? '📈'
+                            : Number(c.newestPrediction) < 0
+                              ? '📉'
+                              : null}
+                        </td>
+                        <td>
+                          {editingRowId === c.id ? (
+                            <form
+                              onSubmit={e => handleAddPrediction(e, c.id)}
+                              className="d-flex flex-column align-items-start gap-2"
+                            >
+                              <p className="mb-1">Pójdzie w górę czy w dół?</p>
+                              <div className="btn-group mb-2" role="group">
+                                <button
+                                  type="button"
+                                  className={`btn btn-outline-primary btn-sm ${predictionDirection === 'up' ? 'active' : ''}`}
+                                  onClick={() => { setPredictionDirection('up'); setSubmitError(null); }}
+                                >
+                                  🔼 Góra
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`btn btn-outline-primary btn-sm ${predictionDirection === 'down' ? 'active' : ''}`}
+                                  onClick={() => { setPredictionDirection('down'); setSubmitError(null); }}
+                                >
+                                  🔽 Dół
+                                </button>
+                              </div>
+                              <div className="d-flex gap-2">
+                                <button
+                                  type="submit"
+                                  className="btn btn-success btn-sm prediction-form-btn" // <-- Add class here
+                                  disabled={isSubmitting}
+                                >
+                                  {isSubmitting ? 'Zapisuję...' : 'Wyślij'}
+                                </button>
+                                <button
+                                  type="button"
+                                  className="btn btn-secondary btn-sm prediction-form-btn" // <-- And here
+                                  onClick={handleCancelPrediction}
+                                  disabled={isSubmitting}
+                                >
+                                  Anuluj
+                                </button>
+                              </div>
+                              {submitError && <small className="text-danger mt-1">{submitError}</small>}
+                            </form>
+                          ) : (
+                            <button
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => handleOpenPredictionForm(c.id)}
+                            >
+                              Dodaj swoją predykcję
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -166,7 +252,6 @@ export default function MainPage() {
                 </table>
               </div>
 
-              {/* pagination */}
               {total > PAGE_SIZE && (
                 <div className="d-flex justify-content-center mt-4">
                   <Pagination
@@ -178,7 +263,6 @@ export default function MainPage() {
                 </div>
               )}
 
-              {/* no results */}
               {total === 0 && (
                 <p className="text-center no-results mt-4">
                   {query
